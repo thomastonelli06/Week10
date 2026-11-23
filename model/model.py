@@ -28,8 +28,8 @@ class Model:
             self.grafo.add_node(n)
 
         #aggiungo i lati
-        for u in nodi:
-            for v in nodi:
+        for i, u in enumerate(nodi):
+            for v in nodi[i + 1:]:
                 if len(DAO.check_if_u_and_v_connected(u.id, v.id)) > 0:
                     #aggiungi un arco tra u e v
                     print("ok")
