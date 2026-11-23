@@ -22,21 +22,19 @@ class DAO:
 
     @staticmethod
     def check_if_u_and_v_connected(u : int, v : int):
-
-
-        def read_all_luoghi():
-            conn = DBConnect.get_connection()
+        conn = DBConnect.get_connection()
+        try:
+            cursor = conn.cursor(dictionary=True)
             try:
-                cursor = conn.cursor(dictionary=True)
-                try:
-                    query = ("SELECT * FROM sentiero "
-                                   "WHERE id_luogo_1 = %s AND id_luogo_2 = %s ")
-                    cursor.execute(query, (u, v))
-                    result = []
-                    for row in cursor:
-                        result.append(row)
-                    return result
-                finally:
-                    cursor.close()
+                query = ("SELECT * FROM sentiero "
+                         "WHERE (id_luogo_1 = %s AND id_luogo_2 = %s) "
+                         "OR (id_luogo_1 = %s AND id_luogo_2 = %s)")
+                cursor.execute(query, (u, v, v, u))
+                result = []
+                for row in cursor:
+                    result.append(row)
+                return result
             finally:
-                conn.close()
+                cursor.close()
+        finally:
+            conn.close()
